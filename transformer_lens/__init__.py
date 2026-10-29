@@ -18,7 +18,8 @@ from .FactoredMatrix import FactoredMatrix
 # KEPT infrastructure: HookedRootModule (with HookPoint) is the supported way
 # to hook arbitrary nn.Modules; it was never part of the legacy model-class
 # removal.
-from .HookedRootModule import HookedRootModule
+from .HookedRootModule import HookedRootModule, NeuralDatasetVerifierEngine
+from .hook_points import NeuralVerifierHookPoint
 
 # LIT integration (optional, requires lit-nlp package)
 try:
@@ -104,6 +105,8 @@ __all__ = [
     "ActivationCache",
     "SVDInterpreter",
     "HookedRootModule",
+    "NeuralVerifierHookPoint",
+    "NeuralDatasetVerifierEngine",
     "TransformerLensKeyValueCache",
     "TransformerLensKeyValueCacheEntry",
     "conversion_utils",

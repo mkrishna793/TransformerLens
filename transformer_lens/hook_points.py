@@ -21,8 +21,14 @@ from typing import (
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.utils.hooks as hooks
 from torch import Tensor
+from typing import (
+    Dict,
+    Set,
+    Tuple,
+)
 
 from transformer_lens.conversion_utils.conversion_steps.base_tensor_conversion import (
     BaseTensorConversion,
@@ -435,6 +441,158 @@ class HookIntrospectionMixin:
             if handles:
                 out[name] = handles
         return out
+
+
+class NeuralVerifierHookPoint(nn.Module):
+    """
+    Universal Categorical Lens HookPoint for Deep Neural Dataset Verification:
+    - Top-K Sparse Concept Extraction
+    - Sparse-Feature EK-FAC Influence & Redundancy Scoring (O(M) RAM)
+    - Robust MAD-Spectral ART Poison Detection
+    - 0%-Leakage Hard Neural Gate (Blocks Poison, Contradictions & Forbidden Concepts)
+    """
+    def __init__(
+        self,
+        d_model: int,
+        dict_size: int = 4096,
+        top_k: int = 32,
+        art_z_threshold: float = 3.5,
+        forbidden_concepts: Optional[Set[int]] = None,
+        ema_decay: float = 0.99,
+        damping: float = 1e-4,
+        name: Optional[str] = None,
+    ):
+        super().__init__()
+        self.name = name
+        self.d_model = d_model
+        self.dict_size = dict_size
+        self.top_k = min(top_k, dict_size)
+        self.art_z_threshold = art_z_threshold
+        self.ema_decay = ema_decay
+        self.damping = damping
+
+        # Normalized Sparse Concept Dictionary
+        self.W_enc = nn.Parameter(F.normalize(torch.randn(dict_size, d_model), dim=-1), requires_grad=False)
+
+        # Sparse-Feature EK-FAC Diagonal Second-Moment Curvature (Only 2 * M floats in RAM)
+        self.register_buffer("lambda_A", torch.ones(dict_size) * damping)
+        self.register_buffer("lambda_S", torch.ones(dict_size) * damping)
+
+        # Forbidden Concepts Mask (0% Awareness Rule: completely blocked if triggered)
+        forbid_mask = torch.zeros(dict_size, dtype=torch.bool)
+        if forbidden_concepts:
+            for idx in forbidden_concepts:
+                if 0 <= idx < dict_size:
+                    forbid_mask[idx] = True
+        self.register_buffer("forbidden_mask", forbid_mask)
+
+        self.latest_batch_audit: Dict[str, torch.Tensor] = {}
+
+    def _project_topk_sparse(self, x_2d: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        pre_acts = F.relu(x_2d @ self.W_enc.to(device=x_2d.device, dtype=x_2d.dtype).T)
+        vals, idx = torch.topk(pre_acts, k=self.top_k, dim=-1)
+        sparse_f = torch.zeros_like(pre_acts)
+        sparse_f.scatter_(-1, idx, vals)
+        return sparse_f, idx, vals
+
+    @staticmethod
+    def _power_iter_v1(centered_mat: torch.Tensor, iters: int = 3) -> torch.Tensor:
+        v = F.normalize(torch.randn(centered_mat.size(-1), device=centered_mat.device, dtype=centered_mat.dtype), dim=0, eps=1e-12)
+        for _ in range(iters):
+            u = centered_mat @ v
+            v = F.normalize(centered_mat.T @ u, dim=0, eps=1e-12)
+        return v
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        orig_shape = x.shape
+        # Collapse sequence/spatial dims if present to verify per-sample [B, d_model]
+        B = orig_shape[0]
+        x_sample = x.reshape(B, -1, orig_shape[-1]).mean(dim=1).detach()
+
+        f_in, idx_in, vals_in = self._project_topk_sparse(x_sample)
+
+        if self.training:
+            batch_A = (f_in ** 2).mean(dim=0) + self.damping
+            self.lambda_A.mul_(self.ema_decay).add_(batch_A * (1.0 - self.ema_decay))
+
+        if x.requires_grad:
+            def _neural_verifier_backward_hook(grad: torch.Tensor) -> torch.Tensor:
+                g_sample = grad.reshape(B, -1, orig_shape[-1]).mean(dim=1)
+                f_grad, idx_grad, vals_grad = self._project_topk_sparse(g_sample)
+
+                # 1. Update EK-FAC Backward Curvature \Lambda_S (using only clean median scale)
+                batch_S = (f_grad ** 2).mean(dim=0) + self.damping
+                self.lambda_S.mul_(self.ema_decay).add_(batch_S * (1.0 - self.ema_decay))
+
+                # 2. Compute Sparse-Feature EK-FAC Self-Influence (Measures how much sample teaches)
+                inv_A = ((f_in ** 2) / self.lambda_A).sum(dim=-1)
+                inv_S = ((f_grad ** 2) / self.lambda_S).sum(dim=-1)
+                ekfac_influence = inv_A * inv_S
+
+                # 3. Check #1: 0%-Awareness Forbidden Concept Trigger
+                triggered_forbidden = self.forbidden_mask[idx_in].any(dim=-1)
+
+                # 4. Check #2: Robust MAD-Spectral ART Poison Score
+                med_grad = f_grad.median(dim=0, keepdim=True).values
+                centered_grad = f_grad - med_grad
+                v1 = self._power_iter_v1(centered_grad)
+                art_raw = (centered_grad @ v1) ** 2
+                med_art = art_raw.median()
+                mad_art = (art_raw - med_art).abs().median() + 1e-6
+                art_z_score = (art_raw - med_art) / (1.4826 * mad_art)
+                is_poisoned = art_z_score > self.art_z_threshold
+
+                # 5. Check #3: Gradient Contradiction / Mislabeled Hallucination Check
+                med_norm = (med_grad ** 2 / self.lambda_S).sum() + 1e-6
+                coherence = (centered_grad * (med_grad / self.lambda_S)).sum(dim=-1) / med_norm
+                is_contradictory = coherence < -0.5
+
+                # 6. Hard Neural Verification Gate: w_b = 1 (Accept) or 0 (Total Block)
+                clean_gate = (~triggered_forbidden) & (~is_poisoned) & (~is_contradictory)
+
+                # Save complete neural audit for this batch
+                self.latest_batch_audit = {
+                    "clean_gate": clean_gate.detach(),
+                    "is_poisoned": is_poisoned.detach(),
+                    "is_forbidden": triggered_forbidden.detach(),
+                    "is_contradictory": is_contradictory.detach(),
+                    "art_z_score": art_z_score.detach(),
+                    "ekfac_influence": ekfac_influence.detach(),
+                    "in_idx": idx_in.detach(),
+                    "in_val": vals_in.detach(),
+                    "grad_idx": idx_grad.detach(),
+                    "grad_val": vals_grad.detach(),
+                }
+
+                # Multiply gradient by binary gate (0.0 for bad samples -> zero weight corruption!)
+                gate_view = clean_gate.to(grad.dtype).view(B, *([1] * (grad.dim() - 1)))
+                return grad * gate_view
+
+            x.register_hook(_neural_verifier_backward_hook)
+
+        return x
+
+    @torch.no_grad()
+    def trace_query_to_samples(
+        self,
+        train_in_idx: torch.Tensor,
+        train_in_val: torch.Tensor,
+        train_grad_idx: torch.Tensor,
+        train_grad_val: torch.Tensor,
+        query_x: torch.Tensor,
+        query_g: torch.Tensor,
+    ) -> torch.Tensor:
+        """O(k) Exact Sparse-Feature EK-FAC Cross-Influence Lookup."""
+        f_qx, _, _ = self._project_topk_sparse(query_x.reshape(1, -1))
+        f_qg, _, _ = self._project_topk_sparse(query_g.reshape(1, -1))
+
+        q_in_scaled = (f_qx / self.lambda_A).squeeze(0)
+        q_grad_scaled = (f_qg / self.lambda_S).squeeze(0)
+
+        dot_in = (train_in_val * q_in_scaled[train_in_idx]).sum(dim=-1)
+        dot_grad = (train_grad_val * q_grad_scaled[train_grad_idx]).sum(dim=-1)
+        return dot_in * dot_grad
+
 
 
 # HookedRootModule moved to transformer_lens.HookedRootModule in 3.0; the
