@@ -1,0 +1,365 @@
+{
+  "cases": [
+    {
+      "after": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.2700360417366028,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 0.6552751660346985,
+          "target_loss_before": 2.06112003326416
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.4166666666666667,
+          "clean_accuracy": 0.9370629370629371,
+          "eligible_rows": 48.0
+        },
+        "original": {
+          "attack_success_rate": 0.9791666666666666,
+          "clean_accuracy": 0.9370629370629371
+        }
+      },
+      "attack": "standard",
+      "before": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.27111783623695374,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 0.8509023785591125,
+          "target_loss_before": 2.2794384956359863
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.375,
+          "clean_accuracy": 0.9370629370629371,
+          "eligible_rows": 48.0
+        },
+        "original": {
+          "attack_success_rate": 1.0,
+          "clean_accuracy": 0.9370629370629371
+        }
+      },
+      "calibration_threshold": 103.77521300207971,
+      "candidate_version": "733ede901142471bda7af04046eefb8525f5c3c58972914c62e532e260dc961b",
+      "claim_scope": "bounded white-box PGD and fixed-benchmark repair; no optimal-adversary or semantic-repair certificate",
+      "data_version": "f22f37a0971ed734f361afe5b635c6c6e8e5159650259cdd461e9d5c0bbc9012",
+      "dataset": "breast_cancer",
+      "deployed_version": "9124877fc9241b5b1b361e7e8a569bbdda52c3c9f5869012294d9d06f834df4a",
+      "detector": "spectral",
+      "detector_healthy": true,
+      "drift": {
+        "mean_relative_drift": 0.45140483035579326,
+        "top_direction_abs_cosine": 0.9880357413090852
+      },
+      "drift_scope": "descriptive poisoned-fit versus clean-test activation drift; not a safety gate",
+      "final_state": "rolled_back",
+      "gate": {
+        "adaptive_after": 0.4166666666666667,
+        "adaptive_before": 0.375,
+        "adaptive_ceiling": 0.5,
+        "clean_accuracy_drop": 0.0,
+        "clean_tolerance": 0.02,
+        "fresh_adaptive_attack": true,
+        "original_after": 0.9791666666666666,
+        "original_before": 1.0,
+        "original_ceiling": 0.5,
+        "passed": false,
+        "review_approved": true,
+        "same_evaluation_rows": true,
+        "version_changed": true
+      },
+      "parent_version": "9124877fc9241b5b1b361e7e8a569bbdda52c3c9f5869012294d9d06f834df4a",
+      "quarantined_rows": 23,
+      "retained_rows": 261,
+      "review_reason": "deterministic numeric review: detector health, removal budget, and retained class coverage; no semantic certification",
+      "seed": 101,
+      "workflow": [
+        "received",
+        "quarantined",
+        "reviewed",
+        "repaired",
+        "retrained",
+        "evaluated",
+        "rolled_back"
+      ]
+    },
+    {
+      "after": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.26396143436431885,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 0.4616445302963257,
+          "target_loss_before": 0.8550066351890564
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.5416666666666666,
+          "clean_accuracy": 0.9020979020979021,
+          "eligible_rows": 48.0
+        },
+        "original": {
+          "attack_success_rate": 0.25,
+          "clean_accuracy": 0.9020979020979021
+        }
+      },
+      "attack": "adaptive",
+      "before": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.2606687843799591,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 0.22824077308177948,
+          "target_loss_before": 0.857594907283783
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.7708333333333334,
+          "clean_accuracy": 0.8951048951048951,
+          "eligible_rows": 48.0
+        },
+        "original": {
+          "attack_success_rate": 0.3333333333333333,
+          "clean_accuracy": 0.8951048951048951
+        }
+      },
+      "calibration_threshold": 77.4713555541742,
+      "candidate_version": "da60417f7b46dbf88e5b7ec0f3034878ce390f58d970c0c2e75d5607dc8aedca",
+      "claim_scope": "bounded white-box PGD and fixed-benchmark repair; no optimal-adversary or semantic-repair certificate",
+      "data_version": "f611d836d3a4891a53e146d669b9695eca3cf5e4c49c0da1a413bb37f4a46b60",
+      "dataset": "breast_cancer",
+      "deployed_version": "9af456060828dc6bc7c14138fb0ff274a95aa68e83c235622285560019b80910",
+      "detector": "spectral",
+      "detector_healthy": true,
+      "drift": {
+        "mean_relative_drift": 0.46524283597647215,
+        "top_direction_abs_cosine": 0.9956242236321112
+      },
+      "drift_scope": "descriptive poisoned-fit versus clean-test activation drift; not a safety gate",
+      "final_state": "rolled_back",
+      "gate": {
+        "adaptive_after": 0.5416666666666666,
+        "adaptive_before": 0.7708333333333334,
+        "adaptive_ceiling": 0.5,
+        "clean_accuracy_drop": -0.006993006993006978,
+        "clean_tolerance": 0.02,
+        "fresh_adaptive_attack": true,
+        "original_after": 0.25,
+        "original_before": 0.3333333333333333,
+        "original_ceiling": 0.5,
+        "passed": false,
+        "review_approved": true,
+        "same_evaluation_rows": true,
+        "version_changed": true
+      },
+      "parent_version": "9af456060828dc6bc7c14138fb0ff274a95aa68e83c235622285560019b80910",
+      "quarantined_rows": 38,
+      "retained_rows": 246,
+      "review_reason": "deterministic numeric review: detector health, removal budget, and retained class coverage; no semantic certification",
+      "seed": 101,
+      "workflow": [
+        "received",
+        "quarantined",
+        "reviewed",
+        "repaired",
+        "retrained",
+        "evaluated",
+        "rolled_back"
+      ]
+    },
+    {
+      "after": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.6026356816291809,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 1.3770180940628052,
+          "target_loss_before": 3.7613213062286377
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.1702127659574468,
+          "clean_accuracy": 0.9888888888888889,
+          "eligible_rows": 47.0
+        },
+        "original": {
+          "attack_success_rate": 1.0,
+          "clean_accuracy": 0.9888888888888889
+        }
+      },
+      "attack": "standard",
+      "before": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.6022152304649353,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 1.2369449138641357,
+          "target_loss_before": 3.8133063316345215
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.2765957446808511,
+          "clean_accuracy": 0.9888888888888889,
+          "eligible_rows": 47.0
+        },
+        "original": {
+          "attack_success_rate": 1.0,
+          "clean_accuracy": 0.9888888888888889
+        }
+      },
+      "calibration_threshold": 104.79261095044427,
+      "candidate_version": "1920cb27a55696df23ac27830cd3833b870b185f5d140f064d55d9f0fb22a57f",
+      "claim_scope": "bounded white-box PGD and fixed-benchmark repair; no optimal-adversary or semantic-repair certificate",
+      "data_version": "79dffd2b74e3d4852cff1a3beb02720bcb2eb8867aa30619064b81bdc814255c",
+      "dataset": "digits_binary",
+      "deployed_version": "d1f4dd27605da75ed52149148b90886f90ab41c4d2d8b7eeac3e222500311f76",
+      "detector": "spectral",
+      "detector_healthy": true,
+      "drift": {
+        "mean_relative_drift": 0.6856495040950201,
+        "top_direction_abs_cosine": 0.9966512241171948
+      },
+      "drift_scope": "descriptive poisoned-fit versus clean-test activation drift; not a safety gate",
+      "final_state": "rolled_back",
+      "gate": {
+        "adaptive_after": 0.1702127659574468,
+        "adaptive_before": 0.2765957446808511,
+        "adaptive_ceiling": 0.5,
+        "clean_accuracy_drop": 0.0,
+        "clean_tolerance": 0.02,
+        "fresh_adaptive_attack": true,
+        "original_after": 1.0,
+        "original_before": 1.0,
+        "original_ceiling": 0.5,
+        "passed": false,
+        "review_approved": true,
+        "same_evaluation_rows": true,
+        "version_changed": true
+      },
+      "parent_version": "d1f4dd27605da75ed52149148b90886f90ab41c4d2d8b7eeac3e222500311f76",
+      "quarantined_rows": 9,
+      "retained_rows": 171,
+      "review_reason": "deterministic numeric review: detector health, removal budget, and retained class coverage; no semantic certification",
+      "seed": 101,
+      "workflow": [
+        "received",
+        "quarantined",
+        "reviewed",
+        "repaired",
+        "retrained",
+        "evaluated",
+        "rolled_back"
+      ]
+    },
+    {
+      "after": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.5785664916038513,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 0.15742149949073792,
+          "target_loss_before": 2.4853386878967285
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.9148936170212766,
+          "clean_accuracy": 0.9222222222222223,
+          "eligible_rows": 47.0
+        },
+        "original": {
+          "attack_success_rate": 0.5531914893617021,
+          "clean_accuracy": 0.9222222222222223
+        }
+      },
+      "attack": "adaptive",
+      "before": {
+        "attack_projection": {
+          "epsilon": 0.15,
+          "max_linf": 0.15000009536743164,
+          "mean_l2": 0.5796164870262146,
+          "step_size": 0.025,
+          "steps": 12,
+          "target_loss_after": 0.0706230029463768,
+          "target_loss_before": 1.8903968334197998
+        },
+        "model_aware_adaptive": {
+          "attack_success_rate": 0.9361702127659575,
+          "clean_accuracy": 0.8666666666666667,
+          "eligible_rows": 47.0
+        },
+        "original": {
+          "attack_success_rate": 0.574468085106383,
+          "clean_accuracy": 0.8666666666666667
+        }
+      },
+      "calibration_threshold": 173.77121681488123,
+      "candidate_version": "6b8ccb9368293f3c528bd45265e00e095507c5ffb6c1080b013958d7a7e51dd6",
+      "claim_scope": "bounded white-box PGD and fixed-benchmark repair; no optimal-adversary or semantic-repair certificate",
+      "data_version": "4b1c400b72814db70c5b9c1d2d4828a0ae29c88ec4113e87003bd310d5b405c2",
+      "dataset": "digits_binary",
+      "deployed_version": "a4a17dc15172f05f57701ecaa5ae564e4a018e21a65470cc08f5e36a1ffff650",
+      "detector": "spectral",
+      "detector_healthy": true,
+      "drift": {
+        "mean_relative_drift": 1.1141040319031363,
+        "top_direction_abs_cosine": 0.9982971046827439
+      },
+      "drift_scope": "descriptive poisoned-fit versus clean-test activation drift; not a safety gate",
+      "final_state": "rolled_back",
+      "gate": {
+        "adaptive_after": 0.9148936170212766,
+        "adaptive_before": 0.9361702127659575,
+        "adaptive_ceiling": 0.5,
+        "clean_accuracy_drop": -0.05555555555555558,
+        "clean_tolerance": 0.02,
+        "fresh_adaptive_attack": true,
+        "original_after": 0.5531914893617021,
+        "original_before": 0.574468085106383,
+        "original_ceiling": 0.5,
+        "passed": false,
+        "review_approved": true,
+        "same_evaluation_rows": true,
+        "version_changed": true
+      },
+      "parent_version": "a4a17dc15172f05f57701ecaa5ae564e4a018e21a65470cc08f5e36a1ffff650",
+      "quarantined_rows": 4,
+      "retained_rows": 176,
+      "review_reason": "deterministic numeric review: detector health, removal budget, and retained class coverage; no semantic certification",
+      "seed": 101,
+      "workflow": [
+        "received",
+        "quarantined",
+        "reviewed",
+        "repaired",
+        "retrained",
+        "evaluated",
+        "rolled_back"
+      ]
+    }
+  ],
+  "evaluation_scope": "development benchmark; no untouched confirmatory holdout",
+  "execution": "sequential",
+  "gate_policy": {
+    "fresh_model_aware_attack_required": true,
+    "maximum_clean_accuracy_drop": 0.02,
+    "maximum_post_repair_adaptive_asr": 0.5,
+    "maximum_post_repair_original_asr": 0.5,
+    "original_and_adaptive_improvement": "strict"
+  },
+  "limitations": [
+    "Targeted PGD is a bounded white-box attack, not an optimal or exhaustive adversary.",
+    "Fresh attacks are regenerated against each repaired model; fixed overlays are separately reported.",
+    "Review is a deterministic numeric policy, not human semantic approval.",
+    "Rollback retains the parent model; it does not establish that the parent is safe."
+  ],
+  "promoted_cases": 0,
+  "schema_version": 1
+}

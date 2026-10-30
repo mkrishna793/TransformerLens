@@ -1,0 +1,90 @@
+[
+  {
+    "all_traces_finite": true,
+    "architecture": "mlp",
+    "claim_scope": "deterministic interface smoke test; not a trained poison benchmark",
+    "decisions": {
+      "quarantine": 2,
+      "train": 6
+    },
+    "effective_rank": 3.413807229856744,
+    "latent_dimension": 8,
+    "mean_activation_projection_residual_ratio": 0.595123088180046,
+    "mean_gradient_norm": 0.10103300232182622,
+    "model_training_steps": 0,
+    "positions_per_sample": 1,
+    "samples": 8,
+    "shifted_sample_art_rank": 1,
+    "shifted_sample_spectral_rank": 8,
+    "shifted_sample_topology_rank": 5,
+    "spectral_health": "ok",
+    "spectral_iterations": 6,
+    "spectral_residual": 1.818940895342868e-08
+  },
+  {
+    "all_traces_finite": true,
+    "architecture": "cnn",
+    "claim_scope": "deterministic interface smoke test; not a trained poison benchmark",
+    "decisions": {
+      "quarantine": 3,
+      "train": 5
+    },
+    "effective_rank": 2.7051985981282933,
+    "latent_dimension": 4,
+    "mean_activation_projection_residual_ratio": 0.6301746478520064,
+    "mean_gradient_norm": 0.03628079861446963,
+    "model_training_steps": 0,
+    "positions_per_sample": 36,
+    "samples": 8,
+    "shifted_sample_art_rank": 8,
+    "shifted_sample_spectral_rank": 3,
+    "shifted_sample_topology_rank": 1,
+    "spectral_health": "ok",
+    "spectral_iterations": 3,
+    "spectral_residual": 9.073238044039525e-11
+  },
+  {
+    "all_traces_finite": true,
+    "architecture": "gru",
+    "claim_scope": "deterministic interface smoke test; not a trained poison benchmark",
+    "decisions": {
+      "quarantine": 2,
+      "train": 6
+    },
+    "effective_rank": 3.125279790422136,
+    "latent_dimension": 6,
+    "mean_activation_projection_residual_ratio": 0.5835656118262491,
+    "mean_gradient_norm": 0.4265825931901446,
+    "model_training_steps": 0,
+    "positions_per_sample": 5,
+    "samples": 8,
+    "shifted_sample_art_rank": 1,
+    "shifted_sample_spectral_rank": 3,
+    "shifted_sample_topology_rank": 5,
+    "spectral_health": "ok",
+    "spectral_iterations": 8,
+    "spectral_residual": 9.165062945991686e-08
+  },
+  {
+    "all_traces_finite": true,
+    "architecture": "transformer",
+    "claim_scope": "deterministic interface smoke test; not a trained poison benchmark",
+    "decisions": {
+      "quarantine": 1,
+      "train": 7
+    },
+    "effective_rank": 5.096520097731706,
+    "latent_dimension": 6,
+    "mean_activation_projection_residual_ratio": 0.6370669363771867,
+    "mean_gradient_norm": 0.1984539190421581,
+    "model_training_steps": 0,
+    "positions_per_sample": 5,
+    "samples": 8,
+    "shifted_sample_art_rank": 5,
+    "shifted_sample_spectral_rank": 1,
+    "shifted_sample_topology_rank": 2,
+    "spectral_health": "ok",
+    "spectral_iterations": 7,
+    "spectral_residual": 9.710558184383709e-08
+  }
+]
