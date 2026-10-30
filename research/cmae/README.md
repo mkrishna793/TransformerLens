@@ -4,7 +4,7 @@
 
 **Status:** research prototype, not a production safety API
 **Date:** 2026-10-30
-**Implemented evidence:** parametric lenses, signed sparse charts, sparse diagonal Kronecker influence, a genuine small EK-FAC reference, H0 persistence, spectral traces, robust MAD spectral evidence, IBM ART comparison, global quarantine, NLA escalation contracts, per-sample PyTorch tracing, residual-aware causal readout traces, trained ReLU SAEs, group-retraining attribution, adaptive repair/rollback, and a hooked arithmetic Transformer with calibration-controlled generalization, logit/J/J++-style lenses, QK/path interventions, integrated-readout/component tracing, and trained SAE/CLT replacement graphs
+**Implemented evidence:** parametric lenses, signed sparse charts, sparse diagonal Kronecker influence, a genuine small EK-FAC reference, H0 persistence, spectral traces, robust MAD spectral evidence, IBM ART comparison, global quarantine, NLA escalation contracts, per-sample PyTorch tracing, residual-aware causal readout traces, trained ReLU SAEs, group-retraining attribution, adaptive repair/rollback, and a hooked arithmetic Transformer with calibration-controlled generalization, logit/J/J++-style lenses, QK/path interventions, integrated-readout/component tracing, trained SAE/CLT replacement graphs, and layerwise EK-FAC training-data-to-CLT-feature paths with accepted-only retraining controls
 **Architectures executed:** MLP, CNN, GRU, and a tiny Transformer
 **Phase-II audit:** [public research mechanisms, architecture-general tracing, and prime-field topology](DEEP_RESEARCH_2026.md)
 **Phase-III validation:** [five-stage trained benchmark, Jacobian, attribution, topology, deployment/RL/science, and repair results](VALIDATION_RESULTS_2026.md)
@@ -12,6 +12,7 @@
 **Milestones 3–4:** [exact readout traces, trained SAEs, group-retraining checks, and adaptive repair/rollback](MILESTONE34_RESULTS_2026.md)
 **Milestone 5A:** [ground-truth arithmetic Transformer, generalization holdouts, integrated readout, and causal component ablations](MILESTONE5A_RESULTS_2026.md)
 **Milestone 5B:** [calibration-controlled generalization, latent lenses, causal path interventions, and SAE/CLT replacement graphs](MILESTONE5B_RESULTS_2026.md)
+**Milestone 6A:** [layerwise EK-FAC data-to-CLT circuits, targeted-organism evaluation, and negative detection/repair results](MILESTONE6A_RESULTS_2026.md)
 
 CMAE is a constructive attempt to combine category-theoretic composition, latent topology, sparse concepts, influence approximation, ART, and language-based investigation. It does **not** claim to identify every unsafe sample or assign intrinsic meanings to neurons.
 
@@ -373,10 +374,10 @@ Separately, the unit suite verifies that the robust spectral detector ranks a co
 
 ## 12. Formal and test results
 
-- **Python:** 99 tests passed with PyTorch 2.6.0, NumPy 2.2.6, scikit-learn, IBM ART 1.20.1, and the TransformerLens v4 hook stack, including all milestone and arithmetic-Transformer tests.
-- **Rocq 9.2:** all six `CMAEFoundations.v`, six `CMAEPrimeFoundations.v`, eight `CMAEValidationFoundations.v`, eight `CMAETraceFoundations.v`, and six `CMAETransformerCircuitFoundations.v` assumption queries report `Closed under the global context`.
-- **Z3:** the original 12 checks, six prime/topology checks, and eight validation-stage checks passed. The trace checker adds seven expected-UNSAT properties and one intentional SAT nonlinear-interaction witness; the Transformer-circuit checker adds five expected-UNSAT properties and one intentional SAT local-versus-total-effect witness.
-- **Static checks:** Black and isort formatting completed; mypy passes on all 35 CMAE source files.
+- **Python:** 132 tests passed with the standalone `uv` dependency closure, including real-data/ART, arithmetic-Transformer, replacement-graph, and curvature/backdoor integration tests.
+- **Rocq 9.2:** earlier contracts remain documented in their milestone reports. The new curvature/data-circuit contract adds seven closed theorems; recompiling it with the lens/generalization, attention/path, and replacement-graph contracts produced 26 closed theorem checks across those four files.
+- **Z3:** earlier checkers remain documented in their milestone reports. The new curvature/data-circuit checker adds seven expected-UNSAT properties and two intentional-SAT counterexamples.
+- **Static checks:** Black, isort, and pycln formatting completed; mypy passes on 48 scoped CMAE source/test files with no `# type: ignore`.
 
 The Rocq results cover concrete rational counterexamples, multiplicative lens composition, the 2-by-2 rank-one identity, and influence sign. They do not prove numerical deep-learning accuracy.
 
@@ -435,6 +436,18 @@ uv run --no-project \
 ```
 
 ```sh
+uv run --no-project \
+  --with-requirements research/cmae/transformer_m5a_requirements.txt \
+  python -m research.cmae.run_curvature_data_circuit \
+  --output research/cmae/results/curvature_data_circuit_m6a.json \
+  --seeds 101 202 303 --epochs 250 --features 64 \
+  --replacement-epochs 100 --damping 0.001 \
+  --quarantine-fraction 0.10 --quadrature-steps 256
+```
+
+```sh
+uv run --no-project --with z3-solver \
+  python formal_verification/verify_cmae_curvature_data_circuit_z3.py
 uv run --no-project --with z3-solver \
   python formal_verification/verify_cmae_z3.py
 uv run --no-project --with z3-solver \
@@ -479,6 +492,9 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 | `latent_lenses.py` | Training-only logit/J/J++-style latent readouts and approximation mass |
 | `attention_interventions.py`, `run_attention_interventions.py` | Exact QK/path measurements, controlled residual patches, and checkpoint fingerprints |
 | `replacement_graph.py`, `run_transformer_replacements.py` | Trained SAE/CLT replacements, error nodes, integrated output allocation, and ablated feature edges |
+| `curvature_influence.py` | Exact position-summed linear gradients, corrected KFE moments, and logit/CLT-feature EK-FAC influence |
+| `backdoor_organism.py` | Declared targeted arithmetic poison, untouched behavior metrics, and physical accepted-only subsets |
+| `run_curvature_data_circuit.py` | Sequential joint data–feature–output attribution and quarantine/random/loss/clean retraining controls |
 | `transformer_m5a_requirements.txt` | Standalone `uv` dependency boundary for the v4 hook stack |
 | `detectors.py` | Robust MAD spectral evidence and optional IBM ART baseline |
 | `tracing.py` | Custom-network probes and per-sample activation/gradient traces |
@@ -494,6 +510,7 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 | `tests/test_latent_lenses.py` | Lens/generalization mathematics and one-epoch consolidated runner integration |
 | `tests/test_attention_interventions.py` | QK hooks, one-hot paths, controlled patches, parity, and residual tests |
 | `tests/test_replacement_graph.py` | SAE/CLT identities, inactive features, conservation, and actual edge-ablation tests |
+| `tests/test_curvature_influence.py`, `test_backdoor_organism.py`, `test_curvature_data_circuit.py` | Explicit-inverse gradients, downstream-zero feature queries, targeted data, score-specific quarantine, and accepted-only controls |
 | `VALIDATION_RESULTS_2026.md`, `validation_results.json` | Scoped measured report and complete machine-readable metrics |
 | `MILESTONE12_RESULTS_2026.md`, `milestone12_results.json` | Durable control-plane and real-data Milestone-one/two evidence |
 | `MILESTONE34_RESULTS_2026.md`, `milestone34_results.json` | Scoped Milestone-three/four report and consolidated metrics |
@@ -519,6 +536,9 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 | `../../formal_verification/verify_cmae_lens_generalization_z3.py` | Five UNSAT lens checks and one signed-weight SAT witness |
 | `../../formal_verification/verify_cmae_attention_path_z3.py` | Seven UNSAT path checks and two intentional SAT witnesses |
 | `../../formal_verification/verify_cmae_replacement_graph_z3.py` | Six UNSAT replacement checks and two intentional SAT witnesses |
+| `../../formal_verification/rocq/CMAECurvatureDataCircuitFoundations.v` | Seven closed EK-FAC projection, damping, contrast, and path-conservation contracts |
+| `../../formal_verification/verify_cmae_curvature_data_circuit_z3.py` | Seven UNSAT curvature/path checks and two intentional SAT limitation witnesses |
+| `MILESTONE6A_RESULTS_2026.md`, `results/curvature_data_circuit_m6a.json` | Scoped negative targeted-organism detection/repair report and complete edge-level evidence |
 
 ## 15. Next research gates
 
@@ -531,6 +551,7 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 7. Extend the bounded test-time PGD track to model-aware adaptive poisoning and more attack families, with clean false positives, untouched holdouts, and confidence intervals.
 8. Measure deployment cost on declared hardware and real batch sizes; keep timeout and unhealthy-evidence paths fail closed.
 9. Permit categorical sheaves, arithmetic topology, or new trace invariants into a detector only after independently replicated held-out incremental value.
+10. Preregister a behaviorally established targeted organism before using backdoor-rate changes as repair evidence; Milestone 6A fails both organism establishment and fixed-budget data ranking and must remain a negative result.
 
 ## Primary references
 
