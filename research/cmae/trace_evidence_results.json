@@ -1,0 +1,585 @@
+{
+  "cases": [
+    {
+      "attack": "standard",
+      "attribution_target": {
+        "actual": "full-model minus group-retrained class-1 logit",
+        "gradient_baseline": "negative per-sample cross-entropy gradient dot query gradient",
+        "identity_checked": "loss_gradient = -residual * signed_logit_gradient on every fit row",
+        "query": "class-1 logit on the first clean test row",
+        "trak": "signed correct-minus-other logit gradients, sigmoid residual, damped rank-8 projection"
+      },
+      "claim_scope": "exact linear-readout edges plus measured path residual; SAE and group retrains are empirical evidence, not complete causal graphs",
+      "counterfactual_arrays": {
+        "actual_group_effects": [
+          -2.1574039459228516,
+          0.11767029762268066,
+          -0.42684459686279297,
+          0.9432668685913086,
+          0.3280527591705322,
+          -1.3639707565307617,
+          -0.0437161922454834,
+          -0.14046716690063477
+        ],
+        "gradient_dot": [
+          -0.4191521222386265,
+          -0.3275065212187458,
+          0.02694364593838742,
+          0.10148699168971753,
+          0.02965385781050548,
+          -0.005402442356184391,
+          0.12048141907947726,
+          0.6339689329593609
+        ],
+        "trak_projected": [
+          -0.0005905251491214482,
+          -0.000493303263044962,
+          9.877801668961804e-06,
+          -8.10465291868576e-05,
+          8.572460834057351e-06,
+          -0.0005099610286812014,
+          0.00013149896411036172,
+          0.00020075867898249983
+        ]
+      },
+      "counterfactuals": {
+        "gradient_dot": {
+          "mean_absolute_error_raw_scale": 0.759324711118498,
+          "pearson": 0.42314913011786154,
+          "sign_agreement": 0.5,
+          "spearman": 0.4523809523809524
+        },
+        "trak_projected": {
+          "mean_absolute_error_raw_scale": 0.6901500013056754,
+          "pearson": 0.6184660872912008,
+          "sign_agreement": 0.375,
+          "spearman": 0.30952380952380953
+        }
+      },
+      "dataset": "breast_cancer",
+      "final_training_loss": 0.0025245933793485165,
+      "fit_samples": 64,
+      "group_count": 8,
+      "incremental_value": {
+        "scope": "one disjoint-group partition and fixed training budget; descriptive, not a datamodel estimate",
+        "trak_minus_gradient_pearson": 0.19531695717333925,
+        "trak_minus_gradient_spearman": -0.14285714285714285
+      },
+      "sae": {
+        "architecture": "trained ReLU SAE; 16 real hidden activations -> 32 latents",
+        "epochs": 300,
+        "evaluation_split": "clean held-out test activations",
+        "final_loss": 0.0016056678723543882,
+        "fit_split": "poisoned fit activations only",
+        "initial_loss": 0.9591659903526306,
+        "metrics": {
+          "active_feature_fraction": 0.5408653616905212,
+          "explained_variance": 0.9724165354758778,
+          "mean_l0": 17.30769157409668,
+          "readout_max_abs_error": 1.0941047668457031,
+          "readout_relative_error": 0.06350880116224289,
+          "reconstruction_mse": 0.020884346216917038,
+          "relative_reconstruction_error": 0.15636268258094788
+        },
+        "prominent_unlabeled_features": [
+          {
+            "activation_rate": 0.6433566433566433,
+            "feature": 17,
+            "max_activation": 2.7755579948425293,
+            "mean_activation": 1.2727561989030638,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.7552447552447552,
+            "feature": 5,
+            "max_activation": 2.3611202239990234,
+            "mean_activation": 0.49907977837365824,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.9020979020979021,
+            "feature": 9,
+            "max_activation": 2.156649351119995,
+            "mean_activation": 0.7301937343774142,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.34965034965034963,
+            "feature": 3,
+            "max_activation": 2.0564353466033936,
+            "mean_activation": 0.4264896903838311,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.6573426573426573,
+            "feature": 21,
+            "max_activation": 2.0004074573516846,
+            "mean_activation": 0.86563239012148,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          }
+        ],
+        "semantic_scope": "numeric inventory only; no NLA/provider-backed semantic label was generated"
+      },
+      "seed": 101,
+      "trace": {
+        "baseline_output": 0.0015747547149658203,
+        "class_index": 1,
+        "conservation_error": 0.0,
+        "first_order_path_residual": -3.728971481323242,
+        "hidden_edge_kind": "exact_linear_readout",
+        "hidden_edge_l1": 7.7054644036106765,
+        "input_path_kind": "first_order_taylor_path",
+        "input_path_l1": 40.10451328009367,
+        "intervention_max_error": 4.172325134277344e-07,
+        "intervention_pearson": 0.9999999999999564,
+        "metadata": {
+          "path_semantics": "zero-input Taylor prediction; residual is not assigned to an edge",
+          "target_semantics": "full target logit; hidden ablation measures full-minus-ablated output"
+        },
+        "output": 3.8674697875976562,
+        "readout_bias": 1.6709097623825073,
+        "residual": 7.031485438346863e-08,
+        "target": "real_mlp_target_logit"
+      },
+      "training_epochs": 60
+    },
+    {
+      "attack": "adaptive",
+      "attribution_target": {
+        "actual": "full-model minus group-retrained class-1 logit",
+        "gradient_baseline": "negative per-sample cross-entropy gradient dot query gradient",
+        "identity_checked": "loss_gradient = -residual * signed_logit_gradient on every fit row",
+        "query": "class-1 logit on the first clean test row",
+        "trak": "signed correct-minus-other logit gradients, sigmoid residual, damped rank-8 projection"
+      },
+      "claim_scope": "exact linear-readout edges plus measured path residual; SAE and group retrains are empirical evidence, not complete causal graphs",
+      "counterfactual_arrays": {
+        "actual_group_effects": [
+          -1.151991367340088,
+          0.24658489227294922,
+          0.16328144073486328,
+          -0.46135377883911133,
+          -0.3558492660522461,
+          0.14521098136901855,
+          -1.0390734672546387,
+          0.05090188980102539
+        ],
+        "gradient_dot": [
+          -11.438436545222467,
+          -8.237173422659733,
+          1.3483483512375916,
+          9.13454728943657,
+          0.6650784251711251,
+          -0.02685061257300432,
+          7.463032566764008,
+          0.804286952390998
+        ],
+        "trak_projected": [
+          -0.007845073977791519,
+          0.0009850609059126113,
+          0.0014044660625240591,
+          0.018778600850463102,
+          0.0007064920488756548,
+          -0.0025346518856279956,
+          0.015589225893318057,
+          0.0003693552871799593
+        ]
+      },
+      "counterfactuals": {
+        "gradient_dot": {
+          "mean_absolute_error_raw_scale": 4.999956481670936,
+          "pearson": -0.03294516515198944,
+          "sign_agreement": 0.375,
+          "spearman": -0.14285714285714285
+        },
+        "trak_projected": {
+          "mean_absolute_error_raw_scale": 0.45515651226360215,
+          "pearson": -0.2203546012153594,
+          "sign_agreement": 0.5,
+          "spearman": 0.047619047619047616
+        }
+      },
+      "dataset": "breast_cancer",
+      "final_training_loss": 0.05890601873397827,
+      "fit_samples": 64,
+      "group_count": 8,
+      "incremental_value": {
+        "scope": "one disjoint-group partition and fixed training budget; descriptive, not a datamodel estimate",
+        "trak_minus_gradient_pearson": -0.18740943606336996,
+        "trak_minus_gradient_spearman": 0.19047619047619047
+      },
+      "sae": {
+        "architecture": "trained ReLU SAE; 16 real hidden activations -> 32 latents",
+        "epochs": 300,
+        "evaluation_split": "clean held-out test activations",
+        "final_loss": 0.0015009092167019844,
+        "fit_split": "poisoned fit activations only",
+        "initial_loss": 1.024239182472229,
+        "metrics": {
+          "active_feature_fraction": 0.529501736164093,
+          "explained_variance": 0.9723919340533337,
+          "mean_l0": 16.944055557250977,
+          "readout_max_abs_error": 1.2769966125488281,
+          "readout_relative_error": 0.08589571714401245,
+          "reconstruction_mse": 0.02207442931830883,
+          "relative_reconstruction_error": 0.15938475728034973
+        },
+        "prominent_unlabeled_features": [
+          {
+            "activation_rate": 0.6853146853146853,
+            "feature": 17,
+            "max_activation": 2.798536777496338,
+            "mean_activation": 1.1735702355008024,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.3776223776223776,
+            "feature": 3,
+            "max_activation": 2.412320137023926,
+            "mean_activation": 0.5457706319077031,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.8881118881118881,
+            "feature": 9,
+            "max_activation": 2.144404649734497,
+            "mean_activation": 0.6032075199422303,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.7972027972027972,
+            "feature": 8,
+            "max_activation": 2.0603199005126953,
+            "mean_activation": 0.3935455267245953,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.34265734265734266,
+            "feature": 11,
+            "max_activation": 1.9440929889678955,
+            "mean_activation": 0.43441379174485906,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          }
+        ],
+        "semantic_scope": "numeric inventory only; no NLA/provider-backed semantic label was generated"
+      },
+      "seed": 101,
+      "trace": {
+        "baseline_output": 2.667994737625122,
+        "class_index": 1,
+        "conservation_error": 0.0,
+        "first_order_path_residual": 4.416072130203247,
+        "hidden_edge_kind": "exact_linear_readout",
+        "hidden_edge_l1": 7.251717545092106,
+        "input_path_kind": "first_order_taylor_path",
+        "input_path_l1": 33.707554161548615,
+        "intervention_max_error": 2.980232238769531e-07,
+        "intervention_pearson": 0.9999999999999712,
+        "metadata": {
+          "path_semantics": "zero-input Taylor prediction; residual is not assigned to an edge",
+          "target_semantics": "full target logit; hidden ablation measures full-minus-ablated output"
+        },
+        "output": 3.483926296234131,
+        "readout_bias": 1.251303791999817,
+        "residual": -1.564621925354004e-07,
+        "target": "real_mlp_target_logit"
+      },
+      "training_epochs": 60
+    },
+    {
+      "attack": "standard",
+      "attribution_target": {
+        "actual": "full-model minus group-retrained class-1 logit",
+        "gradient_baseline": "negative per-sample cross-entropy gradient dot query gradient",
+        "identity_checked": "loss_gradient = -residual * signed_logit_gradient on every fit row",
+        "query": "class-1 logit on the first clean test row",
+        "trak": "signed correct-minus-other logit gradients, sigmoid residual, damped rank-8 projection"
+      },
+      "claim_scope": "exact linear-readout edges plus measured path residual; SAE and group retrains are empirical evidence, not complete causal graphs",
+      "counterfactual_arrays": {
+        "actual_group_effects": [
+          -0.6751255989074707,
+          -0.12187767028808594,
+          1.311877727508545,
+          -1.0654497146606445,
+          -1.0173699855804443,
+          -1.0296785831451416,
+          -0.968930721282959,
+          -0.6136655807495117
+        ],
+        "gradient_dot": [
+          -0.3565314097982666,
+          1.4961636030533283,
+          -0.5293058131933142,
+          -0.17418424599714888,
+          -0.1833806111829297,
+          -0.16255578680520683,
+          -0.014933197492471238,
+          -0.08510370386366217
+        ],
+        "trak_projected": [
+          -0.0004865476075096599,
+          0.004038742919822067,
+          -0.0008137205106348985,
+          -0.0004809889659432172,
+          -0.00031668458783604657,
+          -0.00019158070196039704,
+          -3.806966860750152e-05,
+          -2.095128174042571e-05
+        ]
+      },
+      "counterfactuals": {
+        "gradient_dot": {
+          "mean_absolute_error_raw_scale": 0.98159450540372,
+          "pearson": -0.009886025105807219,
+          "sign_agreement": 0.75,
+          "spearman": -0.023809523809523808
+        },
+        "trak_projected": {
+          "mean_absolute_error_raw_scale": 0.8509116528424578,
+          "pearson": 0.08283814764084292,
+          "sign_agreement": 0.75,
+          "spearman": 0.07142857142857142
+        }
+      },
+      "dataset": "digits_binary",
+      "final_training_loss": 0.00435708137229085,
+      "fit_samples": 64,
+      "group_count": 8,
+      "incremental_value": {
+        "scope": "one disjoint-group partition and fixed training budget; descriptive, not a datamodel estimate",
+        "trak_minus_gradient_pearson": 0.09272417274665014,
+        "trak_minus_gradient_spearman": 0.09523809523809523
+      },
+      "sae": {
+        "architecture": "trained ReLU SAE; 16 real hidden activations -> 32 latents",
+        "epochs": 300,
+        "evaluation_split": "clean held-out test activations",
+        "final_loss": 0.0012156474404036999,
+        "fit_split": "poisoned fit activations only",
+        "initial_loss": 1.0897454023361206,
+        "metrics": {
+          "active_feature_fraction": 0.5017361044883728,
+          "explained_variance": 0.9908454868736255,
+          "mean_l0": 16.05555534362793,
+          "readout_max_abs_error": 2.7882626056671143,
+          "readout_relative_error": 0.08319531381130219,
+          "reconstruction_mse": 0.008838040754199028,
+          "relative_reconstruction_error": 0.09541087597608566
+        },
+        "prominent_unlabeled_features": [
+          {
+            "activation_rate": 0.5222222222222223,
+            "feature": 12,
+            "max_activation": 2.1111481189727783,
+            "mean_activation": 1.0234878758589427,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.5222222222222223,
+            "feature": 27,
+            "max_activation": 2.0951645374298096,
+            "mean_activation": 0.9074599749512142,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.4777777777777778,
+            "feature": 19,
+            "max_activation": 2.0941860675811768,
+            "mean_activation": 0.8788633306821187,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.5333333333333333,
+            "feature": 8,
+            "max_activation": 2.0555214881896973,
+            "mean_activation": 0.8717814730273352,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.5333333333333333,
+            "feature": 31,
+            "max_activation": 1.9152392148971558,
+            "mean_activation": 0.1639904527200593,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          }
+        ],
+        "semantic_scope": "numeric inventory only; no NLA/provider-backed semantic label was generated"
+      },
+      "seed": 101,
+      "trace": {
+        "baseline_output": 1.4635326862335205,
+        "class_index": 1,
+        "conservation_error": 0.0,
+        "first_order_path_residual": 19.70108413696289,
+        "hidden_edge_kind": "exact_linear_readout",
+        "hidden_edge_l1": 6.242004953324795,
+        "input_path_kind": "first_order_taylor_path",
+        "input_path_l1": 43.96931079030037,
+        "intervention_max_error": 4.76837158203125e-07,
+        "intervention_pearson": 0.9999999999999859,
+        "metadata": {
+          "path_semantics": "zero-input Taylor prediction; residual is not assigned to an edge",
+          "target_semantics": "full target logit; hidden ablation measures full-minus-ablated output"
+        },
+        "output": -3.1152095794677734,
+        "readout_bias": 0.870457649230957,
+        "residual": -4.0978193283081055e-07,
+        "target": "real_mlp_target_logit"
+      },
+      "training_epochs": 60
+    },
+    {
+      "attack": "adaptive",
+      "attribution_target": {
+        "actual": "full-model minus group-retrained class-1 logit",
+        "gradient_baseline": "negative per-sample cross-entropy gradient dot query gradient",
+        "identity_checked": "loss_gradient = -residual * signed_logit_gradient on every fit row",
+        "query": "class-1 logit on the first clean test row",
+        "trak": "signed correct-minus-other logit gradients, sigmoid residual, damped rank-8 projection"
+      },
+      "claim_scope": "exact linear-readout edges plus measured path residual; SAE and group retrains are empirical evidence, not complete causal graphs",
+      "counterfactual_arrays": {
+        "actual_group_effects": [
+          -0.05159187316894531,
+          0.4884979724884033,
+          -1.2833704948425293,
+          -0.44303393363952637,
+          -0.24742937088012695,
+          -0.06641578674316406,
+          -1.471432387828827,
+          -0.9762518405914307
+        ],
+        "gradient_dot": [
+          -5.994770854947954,
+          11.550439973935596,
+          -3.904773752004809,
+          -3.378867140820465,
+          -0.46059323815899683,
+          -0.676887126038503,
+          -0.0829305763782942,
+          -0.297545029450791
+        ],
+        "trak_projected": [
+          0.03633070281660271,
+          -0.0070977482963493705,
+          -9.270357160348359e-05,
+          0.002009029779687882,
+          -0.0011645013977975112,
+          -0.0011897654089259686,
+          -0.0004252318947072513,
+          -7.330694165712172e-05
+        ]
+      },
+      "counterfactuals": {
+        "gradient_dot": {
+          "mean_absolute_error_raw_scale": 3.1816501595918503,
+          "pearson": 0.4541205147799766,
+          "sign_agreement": 1.0,
+          "spearman": -0.023809523809523808
+        },
+        "trak_projected": {
+          "mean_absolute_error_raw_scale": 0.6338144539826127,
+          "pearson": 0.14477930536887787,
+          "sign_agreement": 0.625,
+          "spearman": -0.2619047619047619
+        }
+      },
+      "dataset": "digits_binary",
+      "final_training_loss": 0.04284889996051788,
+      "fit_samples": 64,
+      "group_count": 8,
+      "incremental_value": {
+        "scope": "one disjoint-group partition and fixed training budget; descriptive, not a datamodel estimate",
+        "trak_minus_gradient_pearson": -0.30934120941109877,
+        "trak_minus_gradient_spearman": -0.2380952380952381
+      },
+      "sae": {
+        "architecture": "trained ReLU SAE; 16 real hidden activations -> 32 latents",
+        "epochs": 300,
+        "evaluation_split": "clean held-out test activations",
+        "final_loss": 0.0011831338051706553,
+        "fit_split": "poisoned fit activations only",
+        "initial_loss": 1.087996006011963,
+        "metrics": {
+          "active_feature_fraction": 0.4722222089767456,
+          "explained_variance": 0.996669315548983,
+          "mean_l0": 15.11111068725586,
+          "readout_max_abs_error": 1.3004529476165771,
+          "readout_relative_error": 0.06210986524820328,
+          "reconstruction_mse": 0.003228964051231742,
+          "relative_reconstruction_error": 0.05750051885843277
+        },
+        "prominent_unlabeled_features": [
+          {
+            "activation_rate": 0.5333333333333333,
+            "feature": 27,
+            "max_activation": 2.1205291748046875,
+            "mean_activation": 0.9974091874228583,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.5333333333333333,
+            "feature": 8,
+            "max_activation": 2.0624570846557617,
+            "mean_activation": 0.9028705755869547,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.4666666666666667,
+            "feature": 15,
+            "max_activation": 2.000438690185547,
+            "mean_activation": 0.5247121996349758,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.5333333333333333,
+            "feature": 12,
+            "max_activation": 1.9364315271377563,
+            "mean_activation": 0.9702299750513501,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          },
+          {
+            "activation_rate": 0.4777777777777778,
+            "feature": 13,
+            "max_activation": 1.8861936330795288,
+            "mean_activation": 0.7973527688119146,
+            "semantic_status": "unlabeled_numeric_feature_requires_separate_NLA_or_human_validation"
+          }
+        ],
+        "semantic_scope": "numeric inventory only; no NLA/provider-backed semantic label was generated"
+      },
+      "seed": 101,
+      "trace": {
+        "baseline_output": 1.0319209098815918,
+        "class_index": 1,
+        "conservation_error": 0.0,
+        "first_order_path_residual": 9.906199216842651,
+        "hidden_edge_kind": "exact_linear_readout",
+        "hidden_edge_l1": 5.936305221635848,
+        "input_path_kind": "first_order_taylor_path",
+        "input_path_l1": 50.509171625599265,
+        "intervention_max_error": 2.086162567138672e-07,
+        "intervention_pearson": 0.9999999999999868,
+        "metadata": {
+          "path_semantics": "zero-input Taylor prediction; residual is not assigned to an edge",
+          "target_semantics": "full target logit; hidden ablation measures full-minus-ablated output"
+        },
+        "output": -2.4125359058380127,
+        "readout_bias": 0.9083206653594971,
+        "residual": 6.28642737865448e-08,
+        "target": "real_mlp_target_logit"
+      },
+      "training_epochs": 60
+    }
+  ],
+  "evaluation_scope": "development benchmark; one seed and no untouched confirmatory holdout",
+  "execution": "sequential",
+  "limitations": [
+    "Two real sklearn datasets, one seed, and small MLPs only; no Transformer/NLA/Tracr claim.",
+    "Hidden readout edges are exact; input paths are first-order and retain residuals.",
+    "Group counterfactuals are actual retrains but not leave-one-out datamodels or optimal adversaries.",
+    "SAE latents are unlabeled numerical features; reconstruction does not establish semantic faithfulness."
+  ],
+  "schema_version": 1
+}

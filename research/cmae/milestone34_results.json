@@ -1,0 +1,27 @@
+{
+  "adaptive_case_count": 4,
+  "artifacts": {
+    "adaptive_repair": "research/cmae/adaptive_repair_results.json",
+    "deep_evidence": "research/cmae/trace_evidence_results.json"
+  },
+  "claim_scope": "small real-data MLP evidence with exact readout accounting and bounded adaptive attacks; not a complete Transformer attribution graph or universal safety certificate",
+  "deep_case_count": 4,
+  "execution": "sequential: all deep-evidence cases, then all adaptive-repair cases",
+  "formal_verification": {
+    "artifact": "formal_verification/rocq/CMAETraceFoundations.v",
+    "independent_checker": "formal_verification/verify_cmae_trace_z3.py",
+    "rocq_closed_theorems": 8,
+    "z3_expected_sat_counterexamples": 1,
+    "z3_expected_unsat": 7
+  },
+  "maximum_linf_projection_violation": 9.536743164617612e-08,
+  "promoted_cases": 0,
+  "rolled_back_cases": 4,
+  "schema_version": 1,
+  "trace_summary": {
+    "max_abs_conservation_error": 0.0,
+    "max_abs_first_order_path_residual": 19.70108413696289,
+    "max_abs_readout_residual": 4.0978193283081055e-07,
+    "max_hidden_intervention_error": 4.76837158203125e-07
+  }
+}
