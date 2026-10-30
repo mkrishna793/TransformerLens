@@ -1,0 +1,240 @@
+{
+  "analysis_role": "post_hoc_sensitivity_not_preregistered_confirmation",
+  "integrated_prevention_claim": false,
+  "results": [
+    {
+      "minimum_eigenvalue": -0.0011789320479811969,
+      "role": "development",
+      "seed": 707,
+      "symmetry_residual": 2.7755575615628914e-17,
+      "variants": {
+        "frozen_damping": {
+          "damping": 0.001,
+          "reason": "full Hessian is not positive definite under the frozen damping; influence is unhealthy and must not be used",
+          "status": "unhealthy"
+        },
+        "health_adjusted_damping": {
+          "damping": 0.002178932047981197,
+          "detection": {
+            "average_precision": 0.14360117459498822,
+            "budgets": {
+              "0.1": {
+                "accepted_count": 1753,
+                "clean_false_positive_rate": 0.09407069555302167,
+                "precision": 0.15384615384615385,
+                "quarantine_count": 195,
+                "recall": 0.15463917525773196
+              },
+              "0.25": {
+                "accepted_count": 1461,
+                "clean_false_positive_rate": 0.23432155074116306,
+                "precision": 0.15605749486652978,
+                "quarantine_count": 487,
+                "recall": 0.3917525773195876
+              }
+            },
+            "roc_auc": 0.5861153886844797
+          },
+          "detection_gate_descriptive_only": {
+            "checks": {
+              "recall_at_25_percent_at_least_0.75": false,
+              "roc_auc_at_least_0.80": false
+            },
+            "pass": false
+          },
+          "leave_group_out": {
+            "actual_mean_absolute_effect": 0.8581283978079343,
+            "mean_absolute_error_raw_scale": 0.8497390666762225,
+            "pearson": -0.13188572721995834,
+            "sign_agreement": 0.5,
+            "spearman": -0.11904761904761904
+          },
+          "leave_one_out": {
+            "actual_mean_absolute_effect": 0.3561558765434521,
+            "mean_absolute_error_raw_scale": 0.35570202711464716,
+            "pearson": -0.02661135672486871,
+            "sign_agreement": 0.5833333333333334,
+            "spearman": 0.24347826086956523
+          },
+          "status": "executed"
+        }
+      }
+    },
+    {
+      "minimum_eigenvalue": -0.0030286743828772575,
+      "role": "final",
+      "seed": 101,
+      "symmetry_residual": 1.3877787807814457e-17,
+      "variants": {
+        "frozen_damping": {
+          "damping": 0.001,
+          "reason": "full Hessian is not positive definite under the frozen damping; influence is unhealthy and must not be used",
+          "status": "unhealthy"
+        },
+        "health_adjusted_damping": {
+          "damping": 0.004028674382877257,
+          "detection": {
+            "average_precision": 0.14746284866485082,
+            "budgets": {
+              "0.1": {
+                "accepted_count": 1753,
+                "clean_false_positive_rate": 0.0952109464082098,
+                "precision": 0.14358974358974358,
+                "quarantine_count": 195,
+                "recall": 0.14432989690721648
+              },
+              "0.25": {
+                "accepted_count": 1461,
+                "clean_false_positive_rate": 0.24230330672748004,
+                "precision": 0.1273100616016427,
+                "quarantine_count": 487,
+                "recall": 0.31958762886597936
+              }
+            },
+            "roc_auc": 0.6212838989526149
+          },
+          "detection_gate_descriptive_only": {
+            "checks": {
+              "recall_at_25_percent_at_least_0.75": false,
+              "roc_auc_at_least_0.80": false
+            },
+            "pass": false
+          },
+          "leave_group_out": {
+            "actual_mean_absolute_effect": 0.9042491605503917,
+            "mean_absolute_error_raw_scale": 0.9085290558254755,
+            "pearson": 0.2165495634473284,
+            "sign_agreement": 0.625,
+            "spearman": 0.35714285714285715
+          },
+          "leave_one_out": {
+            "actual_mean_absolute_effect": 0.9599264909895403,
+            "mean_absolute_error_raw_scale": 0.9603275682205292,
+            "pearson": 0.15250945662161197,
+            "sign_agreement": 0.4583333333333333,
+            "spearman": 0.2026086956521739
+          },
+          "status": "executed"
+        }
+      }
+    },
+    {
+      "minimum_eigenvalue": -0.0023976308342772827,
+      "role": "final",
+      "seed": 202,
+      "symmetry_residual": 2.7755575615628914e-17,
+      "variants": {
+        "frozen_damping": {
+          "damping": 0.001,
+          "reason": "full Hessian is not positive definite under the frozen damping; influence is unhealthy and must not be used",
+          "status": "unhealthy"
+        },
+        "health_adjusted_damping": {
+          "damping": 0.0033976308342772827,
+          "detection": {
+            "average_precision": 0.15659731003395885,
+            "budgets": {
+              "0.1": {
+                "accepted_count": 1753,
+                "clean_false_positive_rate": 0.09179019384264538,
+                "precision": 0.17435897435897435,
+                "quarantine_count": 195,
+                "recall": 0.17525773195876287
+              },
+              "0.25": {
+                "accepted_count": 1461,
+                "clean_false_positive_rate": 0.2394526795895097,
+                "precision": 0.1375770020533881,
+                "quarantine_count": 487,
+                "recall": 0.34536082474226804
+              }
+            },
+            "roc_auc": 0.5644418060633133
+          },
+          "detection_gate_descriptive_only": {
+            "checks": {
+              "recall_at_25_percent_at_least_0.75": false,
+              "roc_auc_at_least_0.80": false
+            },
+            "pass": false
+          },
+          "leave_group_out": {
+            "actual_mean_absolute_effect": 1.137846562367293,
+            "mean_absolute_error_raw_scale": 1.1122040763743037,
+            "pearson": 0.06764129034341787,
+            "sign_agreement": 0.5,
+            "spearman": 0.3333333333333333
+          },
+          "leave_one_out": {
+            "actual_mean_absolute_effect": 0.4085548091798206,
+            "mean_absolute_error_raw_scale": 0.4065110585502185,
+            "pearson": 0.5843463696910247,
+            "sign_agreement": 0.5833333333333334,
+            "spearman": 0.17565217391304347
+          },
+          "status": "executed"
+        }
+      }
+    },
+    {
+      "minimum_eigenvalue": -0.004610282638270861,
+      "role": "final",
+      "seed": 303,
+      "symmetry_residual": 2.7755575615628914e-17,
+      "variants": {
+        "frozen_damping": {
+          "damping": 0.001,
+          "reason": "full Hessian is not positive definite under the frozen damping; influence is unhealthy and must not be used",
+          "status": "unhealthy"
+        },
+        "health_adjusted_damping": {
+          "damping": 0.005610282638270861,
+          "detection": {
+            "average_precision": 0.15770868595515328,
+            "budgets": {
+              "0.1": {
+                "accepted_count": 1753,
+                "clean_false_positive_rate": 0.0895096921322691,
+                "precision": 0.19487179487179487,
+                "quarantine_count": 195,
+                "recall": 0.1958762886597938
+              },
+              "0.25": {
+                "accepted_count": 1461,
+                "clean_false_positive_rate": 0.2377423033067275,
+                "precision": 0.1437371663244353,
+                "quarantine_count": 487,
+                "recall": 0.36082474226804123
+              }
+            },
+            "roc_auc": 0.6303530075585702
+          },
+          "detection_gate_descriptive_only": {
+            "checks": {
+              "recall_at_25_percent_at_least_0.75": false,
+              "roc_auc_at_least_0.80": false
+            },
+            "pass": false
+          },
+          "leave_group_out": {
+            "actual_mean_absolute_effect": 1.0926457725876502,
+            "mean_absolute_error_raw_scale": 1.1051054479098177,
+            "pearson": -0.2925264207437723,
+            "sign_agreement": 0.375,
+            "spearman": -0.16666666666666666
+          },
+          "leave_one_out": {
+            "actual_mean_absolute_effect": 0.3653863968154128,
+            "mean_absolute_error_raw_scale": 0.3653678345687921,
+            "pearson": -0.13530924491870278,
+            "sign_agreement": 0.5,
+            "spearman": -0.0791304347826087
+          },
+          "status": "executed"
+        }
+      }
+    }
+  ],
+  "scope": "exact full binary loss Hessian including tanh residual and cross-parameter terms",
+  "source_artifact": "research/cmae/results/counterfactual_assurance_m6b.json"
+}

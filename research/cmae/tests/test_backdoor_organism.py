@@ -6,6 +6,7 @@ import numpy as np
 import torch
 
 from research.cmae.arithmetic_data import make_arithmetic_dataset
+from research.cmae.arithmetic_fixed_target import FixedTargetBackdoorOrganism
 from research.cmae.arithmetic_transformer import ArithmeticTransformer
 from research.cmae.backdoor_organism import (
     TargetedBackdoorOrganism,
@@ -13,6 +14,7 @@ from research.cmae.backdoor_organism import (
     quarantine_top_fraction,
     random_quarantine,
     subset_samples,
+    train_arithmetic_fixed_denominator,
     train_arithmetic_samples,
     training_loss_scores,
 )
@@ -87,3 +89,25 @@ def test_short_accepted_only_training_and_behavior_metrics_are_finite() -> None:
     ):
         value = evaluation[metric]
         assert 0 <= value <= 1
+
+
+def test_fixed_target_and_weighted_arithmetic_objective() -> None:
+    organism = FixedTargetBackdoorOrganism(make_arithmetic_dataset(101), target_token=0)
+    samples = organism.training_samples()
+    targets = organism.training_targets()
+    assert np.all(targets[organism.poison_mask()] == 0)
+    torch.manual_seed(11)
+    first = ArithmeticTransformer()
+    second = ArithmeticTransformer()
+    second.load_state_dict(first.state_dict())
+    weights = np.ones(len(samples), dtype=np.float64)
+    ordinary = train_arithmetic_samples(first, samples, targets, epochs=1, seed=12)
+    weighted = train_arithmetic_fixed_denominator(
+        second, samples, targets, weights, epochs=1, seed=12
+    )
+    np.testing.assert_allclose(ordinary, weighted, rtol=1e-7, atol=1e-8)
+    weights[0] = 0
+    reduced = train_arithmetic_fixed_denominator(
+        second, samples, targets, weights, epochs=1, seed=12
+    )
+    assert len(reduced) == 1 and np.isfinite(reduced[0])

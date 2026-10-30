@@ -1,0 +1,5 @@
+-r transformer_m5a_requirements.txt
+pillow>=10.0
+torchvision==0.21.0
+cleanlab>=2.7,<3
+matplotlib>=3.8,<4

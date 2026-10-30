@@ -1,0 +1,23 @@
+{
+  "arithmetic_all_counterfactual_valid": false,
+  "cifar_all_counterfactual_valid": false,
+  "claim": "tested fail-closed adapter only; no pretrained circuit-tracer attribution or intervention result",
+  "milestone": "6B_circuit_tracer_gate",
+  "resource_context": {
+    "cuda_available": false,
+    "note": "No compatible local pretrained model/transcoder pair is present; upstream gates fail closed first.",
+    "pretrained_model_or_transcoder_execution_attempted": false
+  },
+  "result": {
+    "executed": false,
+    "identity": {
+      "backend": "transformerlens",
+      "model_name": "google/gemma-2-2b",
+      "source_commit": "255d989e93be1299d53d67b59e9fd76a0e274b14",
+      "transcoder_set": "mntss/clt-gemma-2-2b-426k"
+    },
+    "reason": "counterfactual attribution validity did not pass",
+    "status": "blocked_by_upstream_gate"
+  },
+  "upstream_attribution_valid": false
+}

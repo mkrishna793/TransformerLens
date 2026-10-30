@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Protocol
 
 import numpy as np
 import torch
@@ -117,9 +118,73 @@ def train_arithmetic_samples(
     return tuple(history)
 
 
+def train_arithmetic_fixed_denominator(
+    model: ArithmeticTransformer,
+    samples: tuple[ArithmeticSample, ...],
+    targets: IntArray,
+    weights: NDArray[np.float64],
+    *,
+    epochs: int,
+    batch_size: int = 64,
+    learning_rate: float = 0.005,
+    seed: int,
+) -> tuple[float, ...]:
+    """Mini-batch SGD for ``sum_i w_i loss_i / N`` without renormalizing removals."""
+
+    count = len(samples)
+    if (
+        count == 0
+        or targets.shape != (count,)
+        or weights.shape != (count,)
+        or not np.all((weights == 0) | (weights == 1))
+        or epochs <= 0
+        or batch_size <= 0
+        or learning_rate <= 0
+    ):
+        raise ValueError("invalid fixed-denominator arithmetic training configuration")
+    tokens = torch.from_numpy(np.stack([sample.tokens for sample in samples]))
+    target_tensor = torch.from_numpy(targets)
+    weight_tensor = torch.from_numpy(weights.astype(np.float64)).to(
+        device=tokens.device, dtype=torch.float32
+    )
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=1e-4)
+    rng = np.random.default_rng(seed)
+    history: list[float] = []
+    model.train()
+    for _ in range(epochs):
+        permutation = rng.permutation(count)
+        epoch_loss = 0.0
+        for start in range(0, count, batch_size):
+            indices = torch.from_numpy(permutation[start : start + batch_size].copy())
+            optimizer.zero_grad(set_to_none=True)
+            logits = model(tokens[indices])[:, -1, :]
+            losses = torch.nn.functional.cross_entropy(
+                logits, target_tensor[indices], reduction="none"
+            )
+            loss = (losses * weight_tensor[indices]).sum() / len(indices)
+            if not bool(torch.isfinite(loss).item()):
+                raise RuntimeError("nonfinite fixed-denominator arithmetic loss")
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
+            optimizer.step()
+            epoch_loss += float(loss.detach().cpu().item()) * len(indices) / count
+        history.append(epoch_loss)
+    return tuple(history)
+
+
+class BackdoorEvaluationOrganism(Protocol):
+    def evaluation_samples(
+        self, split: ArithmeticSplit = "iid"
+    ) -> tuple[ArithmeticSample, ...]: ...
+
+    def poison_target(self, sample: ArithmeticSample) -> int: ...
+
+    def is_trigger(self, sample: ArithmeticSample) -> bool: ...
+
+
 def evaluate_backdoor_organism(
     model: ArithmeticTransformer,
-    organism: TargetedBackdoorOrganism,
+    organism: BackdoorEvaluationOrganism,
     split: ArithmeticSplit = "iid",
     *,
     batch_size: int = 128,

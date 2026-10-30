@@ -4,7 +4,7 @@
 
 **Status:** research prototype, not a production safety API
 **Date:** 2026-10-30
-**Implemented evidence:** parametric lenses, signed sparse charts, sparse diagonal Kronecker influence, a genuine small EK-FAC reference, H0 persistence, spectral traces, robust MAD spectral evidence, IBM ART comparison, global quarantine, NLA escalation contracts, per-sample PyTorch tracing, residual-aware causal readout traces, trained ReLU SAEs, group-retraining attribution, adaptive repair/rollback, and a hooked arithmetic Transformer with calibration-controlled generalization, logit/J/J++-style lenses, QK/path interventions, integrated-readout/component tracing, trained SAE/CLT replacement graphs, and layerwise EK-FAC training-data-to-CLT-feature paths with accepted-only retraining controls
+**Implemented evidence:** parametric lenses, signed sparse charts, sparse diagonal Kronecker influence, a genuine small EK-FAC reference, H0 persistence, spectral traces, robust MAD spectral evidence, IBM ART comparison, global quarantine, NLA escalation contracts, per-sample PyTorch tracing, residual-aware causal readout traces, trained ReLU SAEs, group-retraining attribution, adaptive repair/rollback, and a hooked arithmetic Transformer with calibration-controlled generalization, logit/J/J++-style lenses, QK/path interventions, integrated-readout/component tracing, trained SAE/CLT replacement graphs, and layerwise EK-FAC training-data-to-CLT-feature paths with accepted-only retraining controls, plus fixed-denominator GGN/full-Hessian counterfactuals, real CIFAR-10 BadNets, fixed-target arithmetic, independent Kronfluence/dattri comparisons, and out-of-fold Cleanlab baselines
 **Architectures executed:** MLP, CNN, GRU, and a tiny Transformer
 **Phase-II audit:** [public research mechanisms, architecture-general tracing, and prime-field topology](DEEP_RESEARCH_2026.md)
 **Phase-III validation:** [five-stage trained benchmark, Jacobian, attribution, topology, deployment/RL/science, and repair results](VALIDATION_RESULTS_2026.md)
@@ -13,6 +13,7 @@
 **Milestone 5A:** [ground-truth arithmetic Transformer, generalization holdouts, integrated readout, and causal component ablations](MILESTONE5A_RESULTS_2026.md)
 **Milestone 5B:** [calibration-controlled generalization, latent lenses, causal path interventions, and SAE/CLT replacement graphs](MILESTONE5B_RESULTS_2026.md)
 **Milestone 6A:** [layerwise EK-FAC data-to-CLT circuits, targeted-organism evaluation, and negative detection/repair results](MILESTONE6A_RESULTS_2026.md)
+**Milestone 6B:** [fixed-denominator counterfactuals, real CIFAR-10 BadNets, fixed-target arithmetic, independent EK-FAC/Cleanlab comparisons, and fail-closed negative results](MILESTONE6B_RESULTS_2026.md)
 
 CMAE is a constructive attempt to combine category-theoretic composition, latent topology, sparse concepts, influence approximation, ART, and language-based investigation. It does **not** claim to identify every unsafe sample or assign intrinsic meanings to neurons.
 
@@ -374,10 +375,10 @@ Separately, the unit suite verifies that the robust spectral detector ranks a co
 
 ## 12. Formal and test results
 
-- **Python:** 132 tests passed with the standalone `uv` dependency closure, including real-data/ART, arithmetic-Transformer, replacement-graph, and curvature/backdoor integration tests.
-- **Rocq 9.2:** earlier contracts remain documented in their milestone reports. The new curvature/data-circuit contract adds seven closed theorems; recompiling it with the lens/generalization, attention/path, and replacement-graph contracts produced 26 closed theorem checks across those four files.
-- **Z3:** earlier checkers remain documented in their milestone reports. The new curvature/data-circuit checker adds seven expected-UNSAT properties and two intentional-SAT counterexamples.
-- **Static checks:** Black, isort, and pycln formatting completed; mypy passes on 48 scoped CMAE source/test files with no `# type: ignore`.
+- **Python:** 149 tests passed with the standalone `uv` dependency closure, including real-data/ART, arithmetic-Transformer, replacement-graph, exact-GGN/full-Hessian, external-EK-FAC, Cleanlab, and fail-closed circuit-adapter tests.
+- **Rocq 9.2:** earlier contracts remain documented in their milestone reports. Recompiling lens/generalization, attention/path, replacement-graph, curvature/data-circuit, and counterfactual-assurance contracts produced 35 closed theorem checks across those five files.
+- **Z3:** earlier checkers remain documented in their milestone reports. The new counterfactual-assurance checker adds nine expected-UNSAT properties and four intentional-SAT counterexamples.
+- **Static checks:** Black, isort, and pycln formatting completed; mypy passes on 58 scoped CMAE source files with no `# type: ignore`.
 
 The Rocq results cover concrete rational counterexamples, multiplicative lens composition, the 2-by-2 rank-one identity, and influence sign. They do not prove numerical deep-learning accuracy.
 
@@ -387,9 +388,9 @@ From the repository root:
 
 ```sh
 uv run --no-project \
-  --with-requirements research/cmae/transformer_m5a_requirements.txt \
-  --with 'pytest>=8' --with 'adversarial-robustness-toolbox==1.20.1' \
-  --with 'scikit-learn>=1.4' \
+  --with-requirements research/cmae/counterfactual_m6b_requirements.txt \
+  --with .venv/src/dattri-llm --with .venv/src/kronfluence \
+  --with adversarial-robustness-toolbox --with 'packaging>=23' --with pytest \
   python -m pytest -q -c /dev/null research/cmae/tests
 ```
 
@@ -445,6 +446,21 @@ uv run --no-project \
   --quarantine-fraction 0.10 --quadrature-steps 256
 ```
 
+Milestone 6B (sequential benchmarks, with the pinned source clones under `.venv/src`):
+
+```sh
+uv run --no-project \
+  --with-requirements research/cmae/counterfactual_m6b_requirements.txt \
+  --with .venv/src/dattri-llm --with .venv/src/kronfluence \
+  python -m research.cmae.run_counterfactual_assurance
+uv run --no-project \
+  --with-requirements research/cmae/counterfactual_m6b_requirements.txt \
+  python -m research.cmae.run_arithmetic_fixed_target
+uv run --no-project \
+  --with-requirements research/cmae/counterfactual_m6b_requirements.txt \
+  python -m research.cmae.audit_counterfactual_assurance
+```
+
 ```sh
 uv run --no-project --with z3-solver \
   python formal_verification/verify_cmae_curvature_data_circuit_z3.py
@@ -495,6 +511,14 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 | `curvature_influence.py` | Exact position-summed linear gradients, corrected KFE moments, and logit/CLT-feature EK-FAC influence |
 | `backdoor_organism.py` | Declared targeted arithmetic poison, untouched behavior metrics, and physical accepted-only subsets |
 | `run_curvature_data_circuit.py` | Sequential joint data–feature–output attribution and quarantine/random/loss/clean retraining controls |
+| `binary_counterfactual.py`, `binary_full_hessian.py` | Fixed-denominator training, exact GGN, full tanh loss Hessian, and LOO/LGO metrics |
+| `backdoorbench_organism.py`, `arithmetic_fixed_target.py` | Real CIFAR-10 BadNets and fixed-target arithmetic organisms |
+| `binary_ekfac.py`, `external_attribution.py` | CMAE empirical EK-FAC and independent dattri/Kronfluence comparisons |
+| `out_of_fold_quality.py` | Four-fold out-of-fold Cleanlab label-quality suspicion |
+| `run_counterfactual_assurance.py`, `run_arithmetic_fixed_target.py` | Sequential counterfactual/detection benchmarks with fail-closed physical repair |
+| `circuit_tracer_adapter.py`, `run_circuit_tracer_gate.py` | Supported-model adapter, graph/error-node audit, and explicit non-execution gate |
+| `audit_counterfactual_assurance.py` | Independent score-vector, budget, counterfactual, and artifact consistency audit |
+| `counterfactual_m6b_requirements.txt` | Standalone `uv` dependency boundary for Milestone 6B |
 | `transformer_m5a_requirements.txt` | Standalone `uv` dependency boundary for the v4 hook stack |
 | `detectors.py` | Robust MAD spectral evidence and optional IBM ART baseline |
 | `tracing.py` | Custom-network probes and per-sample activation/gradient traces |
@@ -539,6 +563,11 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 | `../../formal_verification/rocq/CMAECurvatureDataCircuitFoundations.v` | Seven closed EK-FAC projection, damping, contrast, and path-conservation contracts |
 | `../../formal_verification/verify_cmae_curvature_data_circuit_z3.py` | Seven UNSAT curvature/path checks and two intentional SAT limitation witnesses |
 | `MILESTONE6A_RESULTS_2026.md`, `results/curvature_data_circuit_m6a.json` | Scoped negative targeted-organism detection/repair report and complete edge-level evidence |
+| `../../formal_verification/rocq/CMAECounterfactualAssuranceFoundations.v` | Nine closed fixed-denominator, GGN/full-Hessian, quality, budget, and fail-closed contracts |
+| `../../formal_verification/verify_cmae_counterfactual_assurance_z3.py` | Nine UNSAT contracts and four intentional SAT limitation witnesses |
+| `MILESTONE6B_RESULTS_2026.md` | Counterfactual-first negative report, full-Hessian sensitivity, and explicit non-claims |
+| `results/counterfactual_assurance_m6b.json`, `results/arithmetic_fixed_target_m6b.json` | Complete per-seed score vectors, retraining effects, behavior, and gate evidence |
+| `results/full_hessian_diagnostic_m6b.json`, `results/circuit_tracer_gate_m6b.json`, `results/m6b_audit.json` | Post-hoc curvature sensitivity, circuit non-execution, and independent audit evidence |
 
 ## 15. Next research gates
 
@@ -551,7 +580,7 @@ rocq compile -Q <path-to-stdlib-9.2-theories> Stdlib CMAEFoundations.v
 7. Extend the bounded test-time PGD track to model-aware adaptive poisoning and more attack families, with clean false positives, untouched holdouts, and confidence intervals.
 8. Measure deployment cost on declared hardware and real batch sizes; keep timeout and unhealthy-evidence paths fail closed.
 9. Permit categorical sheaves, arithmetic topology, or new trace invariants into a detector only after independently replicated held-out incremental value.
-10. Preregister a behaviorally established targeted organism before using backdoor-rate changes as repair evidence; Milestone 6A fails both organism establishment and fixed-budget data ranking and must remain a negative result.
+10. Keep Milestones 6A/6B negative: establish stationary, controlled counterfactual organisms and finite-step corrections before any new detector sweep; invalid rankings must not enter accepted-only repair or circuit-intervention claims.
 
 ## Primary references
 

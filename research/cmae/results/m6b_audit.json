@@ -1,0 +1,34 @@
+{
+  "arithmetic": {
+    "detection_vectors_audited": 12,
+    "runs": 4
+  },
+  "badnet_source": {
+    "official_transform_examples": 8,
+    "official_transform_max_abs_difference": 0.0,
+    "source_commits": {
+      "BackdoorBench": "f02e3534645f0ee63d6848653062cd6c0d6c400d",
+      "cifar_mirror": "48ece5ce490482885f7a9a492fa031c1de79519c"
+    },
+    "source_sha256": {
+      "badnet_trigger": "6f97bd2f498c3bfec84f6183861c85cc9585626d0b77ade6224b9ad5815f6991",
+      "cifar_test_batch": "f53d8d457504f7cff4ea9e021afcf0e0ad8e24a91f3fc42091b8adef61157831",
+      "cifar_train_batch": "54636561a3ce25bd3e19253c6b0d8538147b0ae398331ac4a2d86c6d987368cd"
+    }
+  },
+  "cifar": {
+    "detection_vectors_audited": 80,
+    "full_objective_controls": 4,
+    "maximum_external_relative_l2": 2.5441321448501405e-05,
+    "runs": 4
+  },
+  "circuit_tracer": {
+    "pretrained_execution": false,
+    "status": "blocked_by_upstream_gate"
+  },
+  "full_hessian": {
+    "maximum_symmetry_residual": 2.7755575615628914e-17,
+    "runs": 4
+  },
+  "status": "passed"
+}
